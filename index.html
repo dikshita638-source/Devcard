@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="DEVCARD — a minimal GitHub developer dashboard with profile, top repositories and language insights." />
+  <meta name="theme-color" content="#FAF8FF" />
+  <title>DEVCARD · GitHub Developer Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%238B78C6'/%3E%3Cpath%20d='M24%2022%2014%2032l10%2010'%20fill='none'%20stroke='white'%20stroke-width='5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3Cpath%20d='M40%2022l10%2010-10%2010'%20fill='none'%20stroke='white'%20stroke-width='5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="DEVCARD home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </span>
+        <span class="brand-name">DEV<em>CARD</em></span>
+      </a>
+      <a class="github-link" href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="Open GitHub">
+        <svg width="19" height="19" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      </a>
+    </header>
+
+    <main>
+      <div class="search-area">
+        <h1 class="page-title">Discover GitHub developers</h1>
+        <p class="page-subtitle">A quiet little dashboard for any GitHub profile, fetched live from the GitHub API.</p>
+        <form id="search-form" class="search-bar" role="search" autocomplete="off">
+          <span class="search-icon" aria-hidden="true">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input id="search-input" type="text" name="username" placeholder="Enter GitHub username..." aria-label="GitHub username" spellcheck="false" autocapitalize="none" />
+          <button id="search-submit" class="search-button" type="submit" aria-label="Search">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </form>
+      </div>
+
+      <section id="empty-state" class="state">
+        <div class="state-card">
+          <div class="state-icon" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h2 class="state-title">Look up any GitHub developer</h2>
+          <p class="state-text">Search for a username to see their profile, top repositories and most used languages.</p>
+        </div>
+      </section>
+
+      <section id="loading-state" class="state" hidden role="status">
+        <div class="state-card">
+          <span class="spinner" aria-hidden="true"></span>
+          <p class="state-text" id="loading-text">Looking up…</p>
+        </div>
+      </section>
+
+      <section id="error-state" class="state" hidden>
+        <div class="state-card">
+          <div class="state-icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h2 class="state-title" id="error-title">Something went wrong</h2>
+          <p class="state-text" id="error-text"></p>
+          <button class="retry-button" id="retry-button" type="button">Try again</button>
+        </div>
+      </section>
+
+      <section id="results" hidden>
+        <article class="profile-card">
+          <div class="profile-top">
+            <div class="avatar-frame">
+              <img id="profile-avatar" class="avatar" src="" alt="Developer avatar" />
+            </div>
+            <div class="profile-identity">
+              <h2 class="profile-name" id="profile-name"></h2>
+              <a id="profile-username" class="profile-username" href="#" target="_blank" rel="noopener noreferrer"></a>
+              <p class="profile-bio" id="profile-bio"></p>
+            </div>
+          </div>
+          <div class="profile-stats">
+            <div class="stat">
+              <span class="stat-icon" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </span>
+              <span class="stat-value" id="stat-followers">0</span>
+              <span class="stat-label">followers</span>
+            </div>
+            <div class="stat">
+              <span class="stat-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </span>
+              <span class="stat-value" id="stat-repos">0</span>
+              <span class="stat-label">public repos</span>
+            </div>
+          </div>
+        </article>
+
+        <div class="dashboard-grid">
+          <section class="panel">
+            <h3 class="panel-title">Top repositories</h3>
+            <div class="repos-list" id="repos-list"></div>
+          </section>
+          <section class="panel">
+            <h3 class="panel-title">Most used languages</h3>
+            <div class="languages-card">
+              <div id="languages-list"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/api.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
