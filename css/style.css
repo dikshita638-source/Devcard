@@ -384,6 +384,19 @@ button {
   font-size: 15px;
 }
 
+.stat-link {
+  color: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.stat-link:hover {
+  color: var(--lavender-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .stat-label {
   color: var(--muted);
   font-size: 14px;

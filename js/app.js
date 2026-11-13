@@ -3,6 +3,7 @@
 
   const REPO_LIMIT = 5;
   const LANGUAGE_DISPLAY_LIMIT = 10;
+  const GITHUB_PROFILE_URL = "https://github.com";
 
   const LANGUAGE_COLORS = {
     JavaScript: "#f1e05a",
@@ -127,6 +128,12 @@
     dom.profileBio.textContent = user.bio || "This developer hasn't added a bio yet.";
     dom.followersValue.textContent = formatCount(user.followers);
     dom.reposValue.textContent = formatCount(user.public_repos);
+
+    const profileUrl = `${GITHUB_PROFILE_URL}/${encodeURIComponent(user.login)}`;
+    dom.followersValue.href = `${profileUrl}?tab=followers`;
+    dom.reposValue.href = `${profileUrl}?tab=repositories`;
+    dom.followersValue.setAttribute("aria-label", `View ${user.login}'s followers on GitHub`);
+    dom.reposValue.setAttribute("aria-label", `View ${user.login}'s public repositories on GitHub`);
   }
 
   function renderRepos(repos) {
